@@ -83,6 +83,8 @@ const response = (await ky
     }
 
     // Redirect after the animations complete
-    window.location.href = `/gallery/${folderName}`;
+    setTimeout(() => {
+      window.location.href = `/gallery/${folderName}`;
+    }, 5000); // Let the fade-out animation finish before redirecting
   };
 </script>
