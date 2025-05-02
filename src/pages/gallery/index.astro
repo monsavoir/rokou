@@ -23,24 +23,66 @@ const response = (await ky
 
 <Layout title="Gallery">
   <section
-    class="flex flex-col items-center justify-center w-full bg-cover bg-center py-20 md:py-0 overflow-hidden flex-1 mt-40"
+    class="flex flex-col items-center justify-center w-full bg-cover bg-center py-20 md:py-0 overflow-hidden flex-1 mt-60"
   >
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {
         response.folders.map((folder) => (
           <a
-            href={`/gallery/${folder.name}`}
-            class="block p-4 border rounded-lg hover:bg-gray-100"
+            class="block p-4 border rounded-lg hover:bg-gray-100 fade-out"
+            onclick={`handleRedirect('${folder.name}')`}
           >
-            <h2 class="relative z-10 text-lg font-semibold">{folder.name}</h2>
+            <h2 class="zoomableHeading relative z-10 text-lg font-semibold">
+              {folder.name}
+            </h2>
           </a>
         ))
       }
     </div>
-    <img
-      src="/earth.svg"
-      alt="Rokou"
-      class="absolute top-0 w-6/12 h-6/12 opacity-90"
-    />
+    <div id="svgContainer" class="absolute top-0 h-1/2">
+      <object
+        id="svgObject"
+        type="image/svg+xml"
+        data="/BWmap.svg"
+        class="w-full h-full"></object>
+    </div>
   </section>
 </Layout>
+
+<script>
+  declare global {
+    interface Window {
+      handleRedirect: (folderName: string) => void;
+    }
+  }
+
+  window.handleRedirect = function (folderName) {
+    console.log("handleRedirect called with folderName:", folderName); // Debugging
+    const gridItems = document.querySelectorAll(".fade-out");
+    const svgContainer = document.getElementById("svgContainer");
+
+    // Apply the fade-out animation to all grid items
+    gridItems.forEach((gridItem) => {
+      console.log("Applying fade-out to:", gridItem); // Debugging
+      gridItem.classList.add(
+        "opacity-0",
+        "transition-opacity",
+        "duration-1000"
+      );
+    });
+
+    // Apply the zoom animation to the SVG container
+    if (svgContainer) {
+      console.log("Applying zoom animation to SVG container"); // Debugging
+      setTimeout(() => {
+        svgContainer.style.transform = "scale(70)";
+        svgContainer.style.transition = "transform 10s ease";
+      }, 1000); // Delay the zoom animation to start after the fade-out
+    } else {
+      console.error("SVG Container not found!"); // Debugging
+    }
+
+    // Redirect after the animations complete
+    window.location.href = `/gallery/${folderName}`;
+  };
+</script>

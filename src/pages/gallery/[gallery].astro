@@ -36,8 +36,10 @@ const response = (await ky
   .json()) as CloudinaryResponse;
 ---
 
-<Layout title="Budapest Gallery">
-  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<Layout title=`${gallery} Gallery`>
+  <section
+    class="grid grid-cols-1 bg-black md:grid-cols-2 lg:grid-cols-3 gap-4"
+  >
     {
       response.resources.map((image) => (
         <CldImage
