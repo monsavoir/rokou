@@ -1,0 +1,42 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ky from "ky";
+
+const SECRET_KEY = import.meta.env.CLOUDINARY_API_SECRET;
+const PUBLIC_KEY = import.meta.env.PUBLIC_CLOUDINARY_API_KEY;
+const CLOUD_NAME = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+type CloudinaryResponse = {
+  folders: Array<{
+    name: string;
+  }>;
+};
+
+const response = (await ky
+  .get(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/folders`, {
+    headers: {
+      Authorization: `Basic ${btoa(`${PUBLIC_KEY}:${SECRET_KEY}`)}`,
+    },
+  })
+  .json()) as CloudinaryResponse;
+---
+
+<Layout title="Gallery">
+  <section
+    class="flex flex-col items-center justify-center w-full bg-cover bg-center py-20 md:py-0 overflow-hidden flex-1"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {
+        response.folders.map((folder) => (
+          <a
+            href={`/gallery/${folder.name}`}
+            class="block p-4 border rounded-lg hover:bg-gray-100"
+          >
+            <h2 class="text-lg font-semibold">{folder.name}</h2>
+          </a>
+        ))
+      }
+    </div>
+    <img src="/earth.svg" alt="Rokou" class="absolute top-0 w-5/12 h-5/12" />
+  </section>
+</Layout>

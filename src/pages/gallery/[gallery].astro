@@ -1,0 +1,52 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { CldImage } from "astro-cloudinary";
+import ky from "ky";
+
+const { gallery } = Astro.params;
+
+export function getStaticPaths() {
+  return [
+    { params: { gallery: "Budapest" } },
+    { params: { gallery: "Tokyo" } },
+    { params: { gallery: "Vienna" } },
+  ];
+}
+
+const SECRET_KEY = import.meta.env.CLOUDINARY_API_SECRET;
+const PUBLIC_KEY = import.meta.env.PUBLIC_CLOUDINARY_API_KEY;
+const CLOUD_NAME = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+type CloudinaryResponse = {
+  resources: Array<{
+    secure_url: string;
+    public_id: string;
+  }>;
+};
+
+const response = (await ky
+  .get(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/resources/by_asset_folder?asset_folder=${gallery}`,
+    {
+      headers: {
+        Authorization: `Basic ${btoa(`${PUBLIC_KEY}:${SECRET_KEY}`)}`,
+      },
+    }
+  )
+  .json()) as CloudinaryResponse;
+---
+
+<Layout title="Budapest Gallery">
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {
+      response.resources.map((image) => (
+        <CldImage
+          src={image.secure_url}
+          width={800}
+          height={600}
+          alt={image.public_id}
+        />
+      ))
+    }
+  </section>
+</Layout>
