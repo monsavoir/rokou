@@ -23,7 +23,7 @@ const response = (await ky
 
 <Layout title="Gallery">
   <section
-    class="flex flex-col items-center justify-center w-full bg-cover bg-center py-20 md:py-0 overflow-hidden flex-1"
+    class="flex flex-col items-center justify-center w-full bg-cover bg-center py-20 md:py-0 overflow-hidden flex-1 mt-40"
   >
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {
@@ -32,11 +32,15 @@ const response = (await ky
             href={`/gallery/${folder.name}`}
             class="block p-4 border rounded-lg hover:bg-gray-100"
           >
-            <h2 class="text-lg font-semibold">{folder.name}</h2>
+            <h2 class="relative z-10 text-lg font-semibold">{folder.name}</h2>
           </a>
         ))
       }
     </div>
-    <img src="/earth.svg" alt="Rokou" class="absolute top-0 w-5/12 h-5/12" />
+    <img
+      src="/earth.svg"
+      alt="Rokou"
+      class="absolute top-0 w-6/12 h-6/12 opacity-90"
+    />
   </section>
 </Layout>
