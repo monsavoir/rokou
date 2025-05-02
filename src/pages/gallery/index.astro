@@ -59,10 +59,18 @@ const response = (await ky
   // Reset styles when the page is loaded
   window.addEventListener("pageshow", () => {
     const svgContainer = document.getElementById("svgContainer");
+    const gridItems = document.querySelectorAll(".fade-out");
+
     if (svgContainer) {
       svgContainer.style.transform = "scale(1)"; // Reset the scale
       svgContainer.style.transition = ""; // Remove any lingering transitions
     }
+
+    // Reset the grid items' opacity and display styles
+    gridItems.forEach((gridItem) => {
+      gridItem.classList.remove("opacity-0"); // Remove the fade-out class
+      (gridItem as HTMLElement).style.display = ""; // Reset the display style
+    });
   });
 
   window.handleRedirect = function (folderName) {
