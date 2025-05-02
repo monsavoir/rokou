@@ -56,6 +56,15 @@ const response = (await ky
     }
   }
 
+  // Reset styles when the page is loaded
+  window.addEventListener("pageshow", () => {
+    const svgContainer = document.getElementById("svgContainer");
+    if (svgContainer) {
+      svgContainer.style.transform = "scale(1)"; // Reset the scale
+      svgContainer.style.transition = ""; // Remove any lingering transitions
+    }
+  });
+
   window.handleRedirect = function (folderName) {
     console.log("handleRedirect called with folderName:", folderName); // Debugging
     const gridItems = document.querySelectorAll(".fade-out");
