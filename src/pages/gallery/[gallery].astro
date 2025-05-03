@@ -8,6 +8,7 @@ const { gallery } = Astro.params;
 export function getStaticPaths() {
   return [
     { params: { gallery: "Budapest" } },
+    { params: { gallery: "Frankfurt" } },
     { params: { gallery: "Tokyo" } },
     { params: { gallery: "Vienna" } },
   ];
